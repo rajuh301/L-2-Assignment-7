@@ -1,3 +1,4 @@
+--Create a Database
 CREATE DATABASE university_db;
 
 
@@ -32,6 +33,7 @@ CREATE TABLE enrollment(
     student_id INT REFERENCES students(student_id)ON DELETE CASCADE,
     course_id INT REFERENCES courses(course_id)ON DELETE CASCADE
 );
+
 
 
 
@@ -79,6 +81,38 @@ SELECT student_name FROM enrollment
    WHERE courses.course_name = 'Next.js';
 
 
---Query 3:
+--Query 3
+UPDATE students
+SET status = 'Awarded'
+WHERE student_id = (
+    SELECT student_id
+    FROM students
+    ORDER BY (frontend_mark + backend_mark) DESC
+    LIMIT 1
+);
 
 
+--Query 4
+DELETE FROM courses
+    WHERE courses.course_id NOT IN (SELECT course_id FROM enrollment);
+
+
+
+--Query 5
+SELECT student_name FROM students LIMIT 2 OFFSET 3;
+
+
+
+--Query 6
+SELECT course_name, count(*) FROM enrollment as e
+LEFT JOIN courses as c ON e.course_id = c.course_id
+GROUP BY course_name
+
+
+--Query 7
+SELECT ROUND(avg(age), 2)as average_age FROM students;
+
+
+--Query 8
+SELECT student_name FROM students
+    WHERE email LIKE '%example.com';
